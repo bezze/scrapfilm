@@ -99,6 +99,6 @@ def diff_phase( fi_matrix ):
         if cnxt>chains_per_row:
             cnxt = 0
 
-        diff_fi = fi_matrix[:,cnxt] - fi_matrix[:,c]
+        diff_fi = fi_matrix[:,cnxt] - fi_matrix[:,c] #
 
     return diff_fi
