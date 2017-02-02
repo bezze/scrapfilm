@@ -1,0 +1,1 @@
+tar czvf pyscr.tar.gz *.py empaquetar create_links.sh make_gif.sh
