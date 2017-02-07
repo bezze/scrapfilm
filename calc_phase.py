@@ -88,17 +88,16 @@ def phase(mode,cini,cend,fila, nrow=3, plot=False ):
 
 def diff_phase( fi_matrix ):
     """ Calcula diff fase entre cada oscilador y su vecino"""
-    
+
     diff_fi = np.empty_like(fi_matrix)
-    chains_per_row = diff_fi.shape[1]
+    chains_per_row = diff_fi.shape[0]
 
     for c in range(chains_per_row):
 
         cnxt = c + 1 #neighbour
         """ Last one sees the first, because of periodicty """
-        if cnxt>chains_per_row:
+        if cnxt>=chains_per_row:
             cnxt = 0
-
-        diff_fi = fi_matrix[:,cnxt] - fi_matrix[:,c] #
+        diff_fi[c,:] = fi_matrix[cnxt,:] - fi_matrix[c,:] #
 
     return diff_fi
