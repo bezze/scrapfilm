@@ -189,11 +189,13 @@ def vel_all(chains,archivo):
     return vel_all
 
 
-def boundary(r,xb):
+#def boundary(r,xb):
+#
+##    out = np.copy(r)
+##    x = np.trunc(2*r/xb)*xb #a*(4-0)
+##    out = r - x #+xbound
+#
+#    return r - np.trunc(2*r/xb)*xb #out
 
-    out = np.copy(r)
-    x = np.trunc(2*r/xb)*xb #a*(4-0)
-    out = r - x #+xbound
-
-    return out
+boundary = lambda r,xb: r - np.trunc(2*r/xb)*xb
 
