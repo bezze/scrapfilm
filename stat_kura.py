@@ -24,8 +24,6 @@ if "--frames" in sys.argv:
         print("--frames needs integers of the form start:end:jump ")
 
 
-
-
 for i in range(6): # 0 -> bottom, 60 -> top
     filename_k = 'kura.row_'+str(i)+'_'+mode+'.npy'
     filename_fi = 'fi.row_'+str(i)+'_'+mode+'.npy'
@@ -49,7 +47,6 @@ for i in range(6): # 0 -> bottom, 60 -> top
 order = np.absolute(all_kura)
 psi = np.angle(all_kura)
 
-
 red = np.linspace(255,0,all_dfi.shape[1])/255
 green = np.linspace(0,255,all_dfi.shape[1])/255
 blue = np.linspace(0,0,all_dfi.shape[1])/255
@@ -72,8 +69,8 @@ for row in range(6):
     #plt.plot(dsm - dms , 'k', linewidth=3)
     plt.plot(sqrt_dsm , linewidth=2)
 
-plt.savefig(path+'/frame_'+str(time)+'.png',format='png')
-plt.show()
+plt.savefig(path+'root_mean_square.png',format='png')
+#plt.show()
 
 if "--frames" in sys.argv:
     fase=0
