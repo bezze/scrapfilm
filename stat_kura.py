@@ -93,11 +93,14 @@ if "--frames" in sys.argv:
         fig.tight_layout()
         fig.savefig(path+'movie/frame_'+str(time)+'.png',format='png')
         plt.close(fig)
-    
-    for row in range(order.shape[0]):
-        plt.plot(order[row,:], label='row '+str(row))
+
+    plt.clf() 
+
+fig, ax = plt.subplots(1,1)
+for row in range(order.shape[0]):
+    ax.plot(order[row,:], label='row '+str(row))
     plt.legend()
-    fig.savefig(path+'order_'+mode+'.png',format='png')
+fig.savefig(path+'order_'+mode+'.png',format='png')
     #plt.show()
 
 mean_rows = np.mean( order, axis=1)
