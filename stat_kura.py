@@ -1,13 +1,10 @@
 #!/usr/bin/env python3
 
-#import init_var as iv
-import numpy as np
-import sys 
-from scrapfilm import boundary
-import os
+import sys, os, numpy as np
 import matplotlib as mpl
 mpl.use('Agg')
 from matplotlib import pyplot as plt
+from scrapfilm import boundary
 
 mode = sys.argv[1]
 path = './stat_kura/'
@@ -69,7 +66,7 @@ for row in range(6):
     #plt.plot(dsm - dms , 'k', linewidth=3)
     plt.plot(sqrt_dsm , linewidth=2)
 
-plt.savefig(path+'root_mean_square.png',format='png')
+plt.savefig(path+'root_mean_square_'+mode+'.png',format='png')
 #plt.show()
 
 if "--frames" in sys.argv:
@@ -94,13 +91,13 @@ if "--frames" in sys.argv:
     for row in range(order.shape[0]):
         plt.plot(order[row,:], label='row '+str(row))
     plt.legend()
-    fig.savefig(path+'order_'+'.png',format='png')
+    fig.savefig(path+'order_'+mode+'.png',format='png')
     #plt.show()
 
 mean_rows = np.mean( order, axis=1)
 std_rows = np.std( order, axis=1)
 mean_kura = np.mean(mean_rows)
-with open(path+'kura_results', 'w') as f:
+with open(path+'kura_results_'+mode, 'w') as f:
     for l in range(mean_rows.size):    
         f.write(str(l)+':  '+str(mean_rows[l])+' '+str( std_rows[l])+'\n' )
     f.write('all: '+str(mean_kura)+' '+str(np.std(mean_rows))+'\n' )

@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-import numpy as np
-import sys
+import sys, os, numpy as np
 import matplotlib as mpl
 mpl.use('Agg')
 from matplotlib import pyplot as plt
