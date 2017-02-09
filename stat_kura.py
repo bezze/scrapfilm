@@ -13,6 +13,12 @@ if not os.path.isdir(path):
 
 if "--frames" in sys.argv:
     frames_arg = sys.argv.index('--frames')
+    if sys.argv[frames_arg+1]=='count':
+        filename_fi = 'fi.row_0_'+mode+'.npy'
+        print('Inspecting '+ filename_fi +' ...')
+        print('(oscillators, timesteps)')
+        print(np.load(filename_fi).shape)
+        raise SystemExit
     try:
         start, end, jump = [ int(x) for x in sys.argv[frames_arg+1].split(':') ]
         if not os.path.isdir(path+'movie'):
