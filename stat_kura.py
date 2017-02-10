@@ -25,6 +25,7 @@ if "--frames" in sys.argv:
             os.mkdir(path+'movie')
     except IndexError and ValueError:
         print("--frames needs integers of the form start:end:jump ")
+        raise SystemExit
 
 
 for i in range(6): # 0 -> bottom, 60 -> top

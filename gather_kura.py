@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import sys 
+import sys, os
 
 try:
     mode = sys.argv[1]
@@ -17,14 +17,14 @@ except IndexError:
 
     raise SystemExit
 
-import init_var as iv
-import numpy as np
-
 path = '../'
 
 import numpy as np
 import init_var as iv
 from calc_phase import phase, diff_phase
+
+print(os.getcwd())
+
 hfchain = int(iv.chains*.5)
 for tb in [ 0, hfchain ]: # 0 -> bottom, 60 -> top
     for row in range(3):
