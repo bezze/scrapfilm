@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import sys 
+import sys , os
 
 try:
     mode = sys.argv[1]
@@ -21,7 +21,6 @@ import init_var as iv
 import numpy as np
 
 path = '../'
-
 
 cini = 0; cend = iv.chains
 
@@ -56,7 +55,7 @@ filename = path+'hist_'+mode+'.npy'
 try:
     old_data = np.load(filename)
     joined_data = np.hstack( (old_data, new_data) )
-    np.save(path, joined_data)
+    np.save(filename, joined_data)
     print('Data appended to '+ filename)
 except FileNotFoundError:
     print('File not found')
