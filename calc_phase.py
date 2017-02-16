@@ -62,12 +62,15 @@ def phase(mode,cini,cend,fila, nrow=3, plot=False ):
 
         fiaux = np.arctan2( v, x )
         fi= np.array([ f + np.pi*( 1-np.sign(f) ) for f in fiaux  ])
+        rad = np.array([ (xi**2+vi**2)**.5  for xi, vi in zip(x,v) ])
 
         """ Stacking all the data into to horizontal vectors """
         if c==(cini+fila):
             fi_data = fi
+            rad_data = rad
         else:
             fi_data = np.vstack( (fi_data,fi) )
+            rad_data = np.vstack( (rad_data,rad) )
 
 
         if plot:
@@ -84,7 +87,7 @@ def phase(mode,cini,cend,fila, nrow=3, plot=False ):
 
     order = ( 1/int(iv.chains/6) )*np.sum(np.exp(1j*fi_data), axis=0)
 
-    return fi_data, order
+    return fi_data, rad_data, order
 
 def diff_phase( fi_matrix ):
     """ Calcula diff fase entre cada oscilador y su vecino"""

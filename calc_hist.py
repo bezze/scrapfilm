@@ -2,7 +2,7 @@
 
 import sys, os, numpy as np
 import matplotlib as mpl
-mpl.use('Agg')
+#mpl.use('Agg')
 from matplotlib import pyplot as plt
 
 nbin = int(sys.argv[1])
@@ -21,6 +21,6 @@ plt.ylim( [np.min(v_data),np.max(v_data)] )
 plt.colorbar()
 #ax.set_aspect('equal')
 plt.title(name+'.bins_'+str(nbin))
-plt.savefig(name+'.bins_'+str(nbin)+'.svg', format='svg')
+#plt.savefig(name+'.bins_'+str(nbin)+'.svg', format='svg')
 plt.savefig(name+'.bins_'+str(nbin)+'.png', format='png')
 plt.clf()
