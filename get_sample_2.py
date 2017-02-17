@@ -53,11 +53,6 @@ for loaded_file, name_file in zip(data_list,hist_files):
         ax.set_ylim( [np.min(v_data),np.max(v_data)] )
         fig_hist.suptitle(mode+' frame '+str(t), fontsize=14, fontweight='bold',
                           color='red')
-        #ax_cm.axis('off')
-        #ax_cm; plt.cla()
-        #ax_ee; plt.cla()
-        #del ax_cm.lines[0]; del ax_ee.lines[0]
-        #plt.show()
         plt.savefig("sample/sample_"+mode+"_"+str(t)+".png", format="png")
         plt.close(fig_hist)
 
