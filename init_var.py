@@ -2,15 +2,10 @@
 import numpy as np
 from scrapfilm import boundary
 
-#all_0 = np.load('all_0.npy') 
-#all_9 = np.load('all_9.npy') 
-
 r_all = np.load('r_all.npy') # ALL POS (time, nchains, nbeads, xyz)
 v_all = np.load('v_all.npy') # ALL VEL
 
-print(r_all.shape, v_all.shape)
-
-print("Loaded: all_0.npy, all_9.npy, v_all.npy")
+print('r_all.shape =', r_all.shape, 'v_all.shape =',v_all.shape)
 
 all_0 = r_all[:,:,0,:]  # 0th bead i.e. root
 all_9 = r_all[:,:,9,:]  # 9th bead
