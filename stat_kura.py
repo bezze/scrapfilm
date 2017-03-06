@@ -67,8 +67,7 @@ for row in range(6):
     #for chain in range(all_dfi.shape[1]):
     #    plt.plot(boundary(all_dfi[0,chain,:],2*np.pi)/np.pi,color=(red[chain],green[chain],blue[chain]))
         #plt.plot(all_dfi[0,chain,:],'b')#,color=(red[chain],green[chain],blue[chain]))
-        #plt.plot(s1,chain*s2,linewidth=10,color=(red[chain],green[chain],blue[chain]))
-    #plt.plot(dms , 'b', linewidth=3)
+        #plt.plot(s1,chain*s2,linewidth=10,color=(red[chain],green[chain],blue[chain])) #plt.plot(dms , 'b', linewidth=3)
     #plt.plot(dsm , 'g', linewidth=3)
     #plt.plot(dsm - dms , 'k', linewidth=3)
     plt.plot(sqrt_dsm , linewidth=2)
@@ -111,3 +110,13 @@ with open(path+'kura_results_'+mode, 'w') as f:
     for l in range(mean_rows.size):    
         f.write(str(l)+':  '+str(mean_rows[l])+' '+str( std_rows[l])+'\n' )
     f.write('all: '+str(mean_kura)+' '+str(np.std(mean_rows))+'\n' )
+
+dsm = np.mean( vboundary( all_dfi[:,:,:], 2*np.pi )**2,axis=1)
+sqrt_dsm = (dsm**.5)/np.pi
+mean_sqrtdsm = np.mean(sqrt_dsm, axis = 1)
+dsm_std = np.std(sqrt_dsm, axis = 1 )
+
+with open(path+'rms_results_'+mode, 'w') as f:
+    for l in range(mean_sqrtdsm.size):    
+        f.write(str(l)+':  '+str(mean_sqrtdsm[l])+' '+str( dsm_std[l])+'\n' )
+    f.write('all: '+str(np.mean(mean_sqrtdsm))+' '+str(np.std(mean_sqrtdsm))+'\n' )
