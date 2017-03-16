@@ -21,10 +21,10 @@ Hx, xed = np.histogram(x_data, bins=nbin)
 Hv, ved = np.histogram(v_data, bins=nbin)
 
 fig, ax = plt.subplots(1,2)
-fig.suptitle(name+'x_and_v.bins_'+str(nbin))
+fig.suptitle(name+'.x_and_v.bins_'+str(nbin))
 ax[0].plot(ed2cen(xed),Hx, '-xr', label="x");ax[0].legend()
 ax[1].plot(ed2cen(ved),Hv, '-sk', label="v");ax[1].legend()
-plt.savefig(name+'x_and_v.bins_'+str(nbin)+'.png', format='png')
+plt.savefig(name+'.x_and_v.bins_'+str(nbin)+'.png', format='png')
 plt.clf()
 
 H, xedges, yedges = np.histogram2d(x_data, v_data, bins=nbin)
