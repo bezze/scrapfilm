@@ -2,16 +2,17 @@
 
 import sys, os, numpy as np
 import matplotlib as mpl
-#mpl.use('Agg')
+mpl.use('Agg')
 from matplotlib import pyplot as plt
 
 nbin = int(sys.argv[1])
 path = sys.argv[2]
 name = path.split('.')[0]
+t0 = 16000 # thermalized system starts here
 
 all_data = np.load(path)
-x_data = all_data[0,:]
-v_data = all_data[1,:]
+x_data = all_data[0,t0:]
+v_data = all_data[1,t0:]
 
 def ed2cen(ed):
     cen = .5*(ed[1:]+ed[:-1])
