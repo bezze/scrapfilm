@@ -18,8 +18,8 @@ def ed2cen(ed):
     cen = .5*(ed[1:]+ed[:-1])
     return cen
 
-Hx, xed = np.histogram(x_data, bins=nbin)
-Hv, ved = np.histogram(v_data, bins=nbin)
+Hx, xed = np.histogram(x_data, bins=nbin, density=True)
+Hv, ved = np.histogram(v_data, bins=nbin, density=True)
 
 fig, ax = plt.subplots(1,2)
 fig.suptitle(name+'.x_and_v.bins_'+str(nbin))
@@ -39,3 +39,17 @@ plt.title(name+'.bins_'+str(nbin))
 #plt.savefig(name+'.bins_'+str(nbin)+'.svg', format='svg')
 plt.savefig(name+'.bins_'+str(nbin)+'.png', format='png')
 plt.clf()
+
+def write_dat(name,edges,histo):
+    with open(name,'w') as f:
+        cen=ed2cen(edges)
+        for i in range(len(histo)):
+            line=str(cen[i])+' '+str(histo[i])+'\n'
+            f.write(line)
+
+write_dat('hist_x.dat',xed,Hx)
+write_dat('hist_v.dat',ved,Hv)
+
+
+
+
