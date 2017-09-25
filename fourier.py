@@ -35,7 +35,7 @@ pad=np.zeros((pot-size,datos_ar.shape[1]-1))
 energias_pad=np.vstack((datos_ar[:,1:],pad)) #datos2=np.append(np.asarray(datos),pad)
 t_fft=t.clock()
 
-freq = np.fft.rfftfreq(energias_pad.shape[0],d=10) #+str(freq[i])+' '
+freq = np.fft.rfftfreq(energias_pad.shape[0],d=10/(2*np.pi)) #+str(freq[i])+' '
 
 with open("transformadas.dat", "w") as g:
     for i in range(len(freq)):
