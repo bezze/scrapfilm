@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 import numpy as np
 import sys, os, fileinput
@@ -30,6 +30,7 @@ while size > pot:
     i+=1
 
 datos_ar=np.asarray(datos, dtype=np.float32)
+print(datos_ar.shape)
 pad=np.zeros((pot-size,datos_ar.shape[1]-1))
 
 energias_pad=np.vstack((datos_ar[:,1:],pad)) #datos2=np.append(np.asarray(datos),pad)
