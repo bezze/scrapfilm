@@ -13,7 +13,7 @@ def plot_transf(n):
             2   Potencial
         """
 
-    leyenda = ['Total','Cinética','Potencial']
+    leyenda = ['Total','Cinetica','Potencial']
 
     rawdat=p.read_table('transformadas.dat', header=None, delim_whitespace=True)#, dtype=np.float32)
     array=np.asarray(rawdat)
