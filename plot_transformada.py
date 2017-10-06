@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib as mpl
 import pandas as p
 mpl.use('Agg')
+mpl.rcParams['agg.path.chunksize'] = 10000
 from matplotlib import pyplot as plt
 
 def plot_transf(n):
@@ -17,11 +18,15 @@ def plot_transf(n):
 
     rawdat=p.read_table('transformadas.dat', header=None, delim_whitespace=True)#, dtype=np.float32)
     array=np.asarray(rawdat)
-    freq = array[:,0]
-    espectro = array[:,3*n+1:3*n+4]
+    ini=0; end=11184811
+    freq = array[ini:end,0]
+    espectro = array[ini:end,3*n+1:3*n+4]
     labeled = ['Real','Imaginaria','Absoluto']
+    fig, ax = plt.subplots(1,1)
     for i in range(3):
-        plt.plot(freq, espectro[:,i], label = labeled[i])
+        ax.plot(freq[ini:end], espectro[ini:end,i], label = labeled[i])
+    ax.set_ylim([-20, 10000])
+    #ax.set_xlim([0, 10000])
     plt.legend()
 
     plt.xlabel('Freq')
