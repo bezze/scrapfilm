@@ -23,11 +23,12 @@ for line in f:
 #-------------------------
 
 size=len(datos)
-pot=0
-i=1
-while size > pot:
-    pot=2**i
-    i+=1
+npwr2=np.ceil(np.log2(size))
+pot=2**npwr2
+# i=1
+# while size > pot:
+#     pot=2**i
+#     i+=1
 
 datos_ar=np.asarray(datos, dtype=np.float32)
 print(datos_ar.shape)
