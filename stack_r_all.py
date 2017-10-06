@@ -2,6 +2,7 @@
 
 import sys , os
 import numpy as np
+import init_var_func as iv
 
 try:
     mode = sys.argv[1]
@@ -18,27 +19,29 @@ except IndexError:
 
     raise SystemExit
 
-
+PWD=os.path.dirname((os.path.realpath(__file__)))
 path = '../'
 N = 400 # Runs number
 
 for i in range(1,N+1): # 1_runs, 2_runs, ..., N_runs
+
     os.chdir(str(i)+'_run')
-    import init_var as iv
+
+    rcm, vcm = iv.init_var()
 
     if mode == "cm":
         """ Centre of Mass  """
-        dummy_x = iv.rcm[:,:,0]
-        dummy_vx = iv.vcm[:,:,0]
+        dummy_x = rcm[:,:,0]
+        dummy_vx = vcm[:,:,0]
     
     elif mode == "ee":
         """ End to end  """
-        dummy_x = iv.r_cent[:,:,9,0]
-        dummy_vx = iv.vcm[:,:,0]
+        dummy_x = r_cent[:,:,9,0]
+        dummy_vx = vcm[:,:,0]
     elif mode == "gr":
         """ Gyration Radius """
-        dummy_x = iv.r_cent[:,:,9,0]
-        dummy_vx = iv.vcm[:,:,0]
+        dummy_x = r_cent[:,:,9,0]
+        dummy_vx = vcm[:,:,0]
     
     new_data = np.stack(( dummy_x, dummy_vx ), axis=2)
     
