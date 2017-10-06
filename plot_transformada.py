@@ -20,6 +20,7 @@ def plot_transf(n):
     freq = array[:,0]
     espectro = array[:,3*n+1:3*n+4]
     labeled = ['Real','Imaginaria','Absoluto']
+    fig, ax
     for i in range(3):
         plt.plot(freq, espectro[:,i], label = labeled[i])
     plt.legend()

@@ -1,6 +1,7 @@
-for file in *.py; do
-    rm ~/scripts/${file/%.py/}
-    ln -s ~/py_scripts/scrapfilm/$file ~/scripts/${file/%.py/} 
-    #ln -s ~/pytest/scrapfilm/$file ~/scripts/${file/%.py/} 
-done
+IDIR=~/scripts/scrapfilm
 
+[[ -d "$IDIR" ]] && rm -r $IDIR
+[[ ! -d "$IDIR" ]] && mkdir $IDIR
+for file in *.py; do
+    ln -s $PWD/$file $IDIR/${file/%.py/} 
+done
