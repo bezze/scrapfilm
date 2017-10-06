@@ -20,7 +20,7 @@ except IndexError:
 
 
 path = '../'
-N = 40 # Runs number
+N = 400 # Runs number
 
 for i in range(1,N+1): # 1_runs, 2_runs, ..., N_runs
     os.chdir(str(i)+'_run')
