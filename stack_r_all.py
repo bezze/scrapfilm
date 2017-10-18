@@ -21,7 +21,7 @@ except IndexError:
 
 PWD=os.path.dirname((os.path.realpath(__file__)))
 path = '../'
-N = 400 # Runs number
+N = int(sys.argv[2]) # Runs number
 
 for i in range(1,N+1): # 1_runs, 2_runs, ..., N_runs
 
@@ -45,7 +45,9 @@ for i in range(1,N+1): # 1_runs, 2_runs, ..., N_runs
     
     new_data = np.stack(( dummy_x, dummy_vx ), axis=2)
     
-    filename = path+'stack_all_'+mode+'.npy'
+    os.chdir('..')
+
+    filename = 'stack_all_'+mode+'.npy'
     
     try:
         old_data = np.load(filename)
@@ -57,4 +59,3 @@ for i in range(1,N+1): # 1_runs, 2_runs, ..., N_runs
         print('Starting new file at '+filename)
         np.save(filename, new_data)
 
-    os.chdir('..')
