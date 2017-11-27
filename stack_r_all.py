@@ -21,9 +21,10 @@ except IndexError:
 
 PWD=os.path.dirname((os.path.realpath(__file__)))
 path = '../'
-N = int(sys.argv[2]) # Runs number
+M = int(sys.argv[2]) # Runs number
+N = int(sys.argv[3]) # Runs number
 
-for i in range(1,N+1): # 1_runs, 2_runs, ..., N_runs
+for i in range(M,N+1): # 1_runs, 2_runs, ..., N_runs
 
     os.chdir(str(i)+'_run')
 
@@ -49,6 +50,7 @@ for i in range(1,N+1): # 1_runs, 2_runs, ..., N_runs
 
     filename = 'stack_all_'+mode+'.npy'
     
+    print('RUN = ', i)
     try:
         old_data = np.load(filename)
         joined_data = np.concatenate( (old_data, new_data), axis=0 )

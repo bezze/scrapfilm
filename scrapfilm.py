@@ -2,13 +2,13 @@
 
 import numpy as np
 from numpy.linalg import norm
-import pandas as p
 import sys 
 from matplotlib import pyplot as plt
 
 archivos=sys.argv[1:]
 
 def analyze(chain,mon,archivo, rel=False):
+    import pandas as p
     nmon=10
     rawdat=p.read_table(archivo)
     datos=np.asarray(rawdat)
@@ -30,6 +30,7 @@ def analyze(chain,mon,archivo, rel=False):
     return tray
 
 def analyze_v(N,chain,mon,archivo, rel=False):
+    import pandas as p
     nmon=10
     rawdat=p.read_table(archivo)
     datos=np.asarray(rawdat)
@@ -51,6 +52,7 @@ def analyze_v(N,chain,mon,archivo, rel=False):
     return tray
 
 def analyze_bead(chains,mon,archivo):
+    import pandas as p
     nmon=10
     rawdat=p.read_table(archivo)
     datos=np.asarray(rawdat)
@@ -80,6 +82,7 @@ def analyze_bead(chains,mon,archivo):
     return tray_all
 
 def vel_bead(chains,mon,archivo):
+    import pandas as p
     nmon=10
     N=nmon*chains
     rawdat=p.read_table(archivo)
@@ -103,6 +106,7 @@ def vel_bead(chains,mon,archivo):
     return tray_all
 
 def pos_all(chains,archivo):
+    import pandas as p
     nmon=10
     N=nmon*chains
     rawdat=p.read_table(archivo)
@@ -146,6 +150,7 @@ def pos_all(chains,archivo):
     return pos_all
 
 def vel_all(chains,archivo):
+    import pandas as p
     nmon=10
     N=nmon*chains
     rawdat=p.read_table(archivo)
