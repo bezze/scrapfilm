@@ -41,12 +41,12 @@ def init_var():
 
     def boundary(X,L,a):
         def aux(x,L,a):
-        ┆   return x -(L+a/2)*np.trunc(x/(L-a))
+            return x -(L+a/2)*np.trunc(x/(L-a))
         return np.vectorize(aux)(X,L,a)
 
     r_aux = boundary(r_cent[:,:,:,0], bounds,a)
     r_cent[:,:,:,0] = r_aux
-    rcm = np.mean(r_cent, axis=2)
-    vcm = np.mean(v_all, axis=2)
-
-    return rcm, vcm
+    # rcm = np.mean(r_cent, axis=2)
+    # vcm = np.mean(v_all, axis=2)
+    # return rcm, vcm
+    return r_cent

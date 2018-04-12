@@ -40,7 +40,7 @@ for t in range(r_all.shape[0]):
 
 def boundary(X,L,a):
     def aux(x,L,a):
-    ┆   return x -(L+a/2)*np.trunc(x/(L-a))
+        return x -(L+a/2)*np.trunc(x/(L-a))
     return np.vectorize(aux)(X,L,a)
 
 r_aux = boundary(r_cent[:,:,:,0], bounds, a)

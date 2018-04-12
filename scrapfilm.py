@@ -5,17 +5,20 @@ from numpy.linalg import norm
 import sys 
 from matplotlib import pyplot as plt
 
+# CONSTANTS
+
+NMON = 10 # Number of beads per chain
+
 archivos=sys.argv[1:]
 
 def analyze(chain,mon,archivo, rel=False):
     import pandas as p
-    nmon=10
     rawdat=p.read_table(archivo)
     datos=np.asarray(rawdat)
     N=int(list(rawdat)[0])
     step=N+1 #time step
-    particle = mon+chain*nmon #particle indexing is 0-indexed
-    root = chain*nmon
+    particle = mon+chain*NMON #particle indexing is 0-indexed
+    root = chain*NMON
     
     #root = 0# For periodic CC
     root_pos = np.asarray(rawdat.iloc[root][0].split()[1:], dtype=float)# For periodic CC
@@ -31,13 +34,12 @@ def analyze(chain,mon,archivo, rel=False):
 
 def analyze_v(N,chain,mon,archivo, rel=False):
     import pandas as p
-    nmon=10
     rawdat=p.read_table(archivo)
     datos=np.asarray(rawdat)
 #    N=int(list(rawdat)[0])
     step=N+1 #time step
-    particle = mon+chain*nmon #particle indexing is 0-indexed
-    root = chain*nmon
+    particle = mon+chain*NMON #particle indexing is 0-indexed
+    root = chain*NMON
     
     #root = 0# For periodic CC
     root_pos = np.asarray(rawdat.iloc[root][0].split()[1:], dtype=float)# For periodic CC
@@ -53,7 +55,6 @@ def analyze_v(N,chain,mon,archivo, rel=False):
 
 def analyze_bead(chains,mon,archivo):
     import pandas as p
-    nmon=10
     rawdat=p.read_table(archivo)
     datos=np.asarray(rawdat)
     N=int(list(rawdat)[0])
@@ -61,8 +62,8 @@ def analyze_bead(chains,mon,archivo):
     tray_all_list=[]
 
     for ch in range(chains):
-        particle = mon+ch*nmon #particle indexing is 0-indexed
-        root = ch*nmon
+        particle = mon+ch*NMON #particle indexing is 0-indexed
+        root = ch*NMON
         
         #root = 0# For periodic CC
         root_pos = np.asarray(rawdat.iloc[root][0].split()[1:], dtype=float)# For periodic CC
@@ -83,15 +84,14 @@ def analyze_bead(chains,mon,archivo):
 
 def vel_bead(chains,mon,archivo):
     import pandas as p
-    nmon=10
-    N=nmon*chains
+    N=NMON*chains
     rawdat=p.read_table(archivo)
     datos=np.asarray(rawdat)
     tray_all_list = []
     step=N+1 #time step
     for ch in range(chains):
-        particle = mon+ch*nmon #particle indexing is 0-indexed
-        root = ch*nmon
+        particle = mon+ch*NMON #particle indexing is 0-indexed
+        root = ch*NMON
         
         tray_list=[]
         index=0
@@ -106,9 +106,12 @@ def vel_bead(chains,mon,archivo):
     return tray_all
 
 def pos_all(chains,archivo):
+    """ This function reads the film_xmol file and returns a NxT matrix, where N is
+    the particle number and T is the length of the time vector. This matrix is sorted
+    as it was print by the mfa program, so it needs to be further processed to be useful."""
+
     import pandas as p
-    nmon=10
-    N=nmon*chains
+    N=NMON*chains
     rawdat=p.read_table(archivo)
     step=N+1 #time step
     pos_list_all=[]
@@ -117,10 +120,10 @@ def pos_all(chains,archivo):
         pos_list_chain = []
         for ch in range(chains):
             pos_list=[]
-            for mon in range(nmon):
+            for mon in range(NMON):
                 """ Recorro la cadena ch"""
-                particle = mon+ch*nmon #particle indexing is 0-indexed
-                root = ch*nmon
+                particle = mon+ch*NMON #particle indexing is 0-indexed
+                root = ch*NMON
                 
                 #print("ch",ch,"mon",mon,"index",index)
                 #print(rawdat.iloc[index+particle][0].split()[0:])
@@ -151,8 +154,7 @@ def pos_all(chains,archivo):
 
 def vel_all(chains,archivo):
     import pandas as p
-    nmon=10
-    N=nmon*chains
+    N=NMON*chains
     rawdat=p.read_table(archivo)
     step=N+1 #time step
     vel_list_all=[]
@@ -161,10 +163,10 @@ def vel_all(chains,archivo):
         vel_list_chain = []
         for ch in range(chains):
             vel_list=[]
-            for mon in range(nmon):
+            for mon in range(NMON):
                 """ Recorro la cadena ch"""
-                particle = mon+ch*nmon #particle indexing is 0-indexed
-                root = ch*nmon
+                particle = mon+ch*NMON #particle indexing is 0-indexed
+                root = ch*NMON
                 
                 #print("ch",ch,"mon",mon,"index",index)
                 #print(rawdat.iloc[index+particle][0].split()[0:])
