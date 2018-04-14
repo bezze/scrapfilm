@@ -1,4 +1,19 @@
 #!/usr/bin/env python3
+
+"""
+INPUTS
+    Implicit:
+        r_all.npy   <-  savescrap.py
+        v_all.npy   <-  savescrap.py
+
+OUTPUTS
+    Implicit:
+        All local variables
+
+    Explicit:
+        None, its meant to be imported
+"""
+
 import numpy as np
 
 r_all = np.load('r_all.npy') # ALL POS (time, nchains, nbeads, xyz)
@@ -37,7 +52,6 @@ for t in range(r_all.shape[0]):
             r_cent[t,c,b,:] = r_all[t,c,b,:] - r_all[t,c,0,:]
 
 """ Boundary conditions """
-
 def boundary(X,L,a):
     def aux(x,L,a):
         return x -(L+a/2)*np.trunc(x/(L-a))
@@ -46,6 +60,7 @@ def boundary(X,L,a):
 r_aux = boundary(r_cent[:,:,:,0], bounds, a)
 r_cent[:,:,:,0] = r_aux
 
+""" Taking center of mass """
 rcm = np.mean(r_cent, axis=2)
 vcm = np.mean(v_all, axis=2)
 

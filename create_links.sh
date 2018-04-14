@@ -1,4 +1,4 @@
-IDIR=~/scripts/scrapfilm
+IDIR=~/Scripts/scrapfilm
 
 [[ -d "$IDIR" ]] && rm -r $IDIR
 [[ ! -d "$IDIR" ]] && mkdir $IDIR
