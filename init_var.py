@@ -16,51 +16,59 @@ OUTPUTS
 
 import numpy as np
 
-r_all = np.load('r_all.npy') # ALL POS (time, nchains, nbeads, xyz)
-v_all = np.load('v_all.npy') # ALL VEL
+""" UnBoundary conditions """
+def vec_ub(x,Lx):
+    def unbound (y):
+        ratio = np.trunc(y/(Lx/2.))
+        return y - Lx*ratio
+    return np.vectorize(unbound)(x)
 
-print('r_all.shape =', r_all.shape, 'v_all.shape =',v_all.shape)
+class init_var ():
 
-all_0 = r_all[:,:,0,:]  # 0th bead i.e. root
-all_9 = r_all[:,:,9,:]  # 9th bead
+    def __init__(self,NROWS ):
+        self.r_all = np.load('r_all.npy') # ALL POS (time, nchains, nbeads, xyz)
+        self.v_all = np.load('v_all.npy') # ALL VEL (idem)
 
-steps = r_all.shape[0]
-chains = r_all.shape[1]
-beads = r_all.shape[2]
+        # print('r_all.shape =', r_all.shape, 'v_all.shape =',v_all.shape)
 
-a = r_all[0,3,0,0]-r_all[0,0,0,0]
-b = r_all[0,1,0,1]-r_all[0,0,0,1]
-Lx = r_all[0,int(chains*.5-3),0,0]+a/2
-Ly = r_all[0,2,0,1]+b/2
-bounds = Lx
+        self.steps, self.chains, self.beads, self.ndim = self.r_all.shape
 
-print("steps = ", steps)
-print("chains = ", chains)
-print("")
-print("a = ",a )
-print("b = ",b )
-print("Lx = ", Lx )
-print("Ly = ", Ly )
-print("Using bounds = ",bounds)
+        """ This assumes NROWS rows along the x direction """
+        self.a = self.r_all[0,NROWS,0,0]-self.r_all[0,0,0,0]
+        self.b = self.r_all[0,1,0,1]-self.r_all[0,0,0,1]
+        self.Lx = self.r_all[0,int(self.chains*.5-3),0,0]+self.a/2
+        self.Ly = self.r_all[0,2,0,1]+self.b/2
 
-r_cent = np.empty_like(r_all)
+    def print_info(self):
+        print("steps = ", self.steps)
+        print("chains = ", self.chains)
+        print("")
+        print("a = ",self.a )
+        print("b = ",self.b )
+        print("Lx = ", self.Lx )
+        print("Ly = ", self.Ly )
+        # print("Using bounds = ",bounds)
 
-""" Centering """
-for t in range(r_all.shape[0]):
-    for c in range(r_all.shape[1]):
-        for b in range(r_all.shape[2]):
-            r_cent[t,c,b,:] = r_all[t,c,b,:] - r_all[t,c,0,:]
+    def centered(self):
 
-""" Boundary conditions """
-def boundary(X,L,a):
-    def aux(x,L,a):
-        return x -(L+a/2)*np.trunc(x/(L-a))
-    return np.vectorize(aux)(X,L,a)
+        """
+        Returns: r_cent, v_all
 
-r_aux = boundary(r_cent[:,:,:,0], bounds, a)
-r_cent[:,:,:,0] = r_aux
+        r_cent is the particle positions, after being centered around the root of
+        their respective chains and reversed the boundary conditions in x dir.
 
-""" Taking center of mass """
-rcm = np.mean(r_cent, axis=2)
-vcm = np.mean(v_all, axis=2)
+        v_all is just piped through
+        """
+        r_all = self.r_all
+        v_all = self.v_all
 
+        r_cent = np.empty_like(r_all)
+
+        """ Centering """
+        for b in range(10):
+            r_cent[:,:,b,:] = r_all[:,:,b,:] - r_all[:,:,0,:]
+
+        r_aux = vec_ub(r_cent[:,:,:,0], self.Lx)
+        r_cent[:,:,:,0] = r_aux
+
+        return r_cent, v_all

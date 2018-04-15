@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
 
+"""
+Plots energies spectrum density.
+
+Takes transformada.dat which is a file with 1+3 columns of spectral data, the
+first for frequency and the rest for total energy, cinetic and potential.
+"""
+
 import numpy as np
 import matplotlib as mpl
 import pandas as p
@@ -8,7 +15,7 @@ mpl.rcParams['agg.path.chunksize'] = 10000
 from matplotlib import pyplot as plt
 
 def plot_transf(n):
-    """n: 
+    """n:
             0   Energia
             1   Cinetica
             2   Potencial

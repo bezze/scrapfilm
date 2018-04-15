@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 import matplotlib as mpl
+import matplotlib.cm as mcm
+import matplotlib.colors as mcs
 import matplotlib.pyplot as plt
 
 import numpy as np
@@ -26,7 +28,7 @@ def loadargs(args):
 
     RUNS = int(RUNS)
     ini = float(ini)
-    end = float(end)+1
+    end = float(end)#+1
     rows = int(rows)
 
     return RUNS, ini, end, rows, Name
@@ -43,7 +45,7 @@ def fake_loadargs():
     """ loadargs.dat is a textfile that contains RUNS ini end rows """
     RUNS = int(RUNS)
     ini = float(ini)
-    end = float(end)+1
+    end = float(end)#+1
     rows = int(rows)
 
     return RUNS, ini, end, rows, Name
@@ -125,6 +127,12 @@ def plegado(A,j):
 
 cm2in = lambda w,h: (w/2.54,h/2.54)
 ed2cen = lambda ed:  .5*(ed[1:]+ed[:-1])
+
+def create_custom_cmap ():
+    colors = ["black", "white", "black"]
+    cmap = mcs.LinearSegmentedColormap.from_list("", colors)
+    return cmap
+
 #-------------------------------------------------------------------------------
 
 def peak_finder(Fmatrix, thresh, neighborhood, iterations=1):
@@ -398,7 +406,7 @@ def plot_stripes_ROW(ROWLIST,SETTINGS):
     cm2in = lambda w,h: (w/2.54,h/2.54)
     print(len(ROWLIST))
     fig_pend, ax_pend = plt.subplots(len(ROWLIST),1)
-
+    cmap = create_custom_cmap ()
     # np.save("matrix", matrix )
     for index, ROW in enumerate(ROWLIST):
 
@@ -419,10 +427,10 @@ def plot_stripes_ROW(ROWLIST,SETTINGS):
 
         extent = [t[0],t[-1],0,Npr]
 
-        implot = axim.imshow(matrix,interpolation='none',
-                            cmap="gray",vmin=0, vmax=2*np.pi,
-                            extent=extent, aspect='auto',
-                            origin='lower')
+        implot = axim.imshow(matrix,interpolation='none', cmap=cmap, # cmap="gray",
+                             vmin=0,
+                             vmax=2*np.pi, extent=extent, aspect='auto',
+                             origin='lower')
 
         ytick_labels = np.arange(0,Npr,10)
         ytick_pos = np.arange(0,Npr,10)+.5
@@ -550,8 +558,8 @@ def plot_fft2(samp_t, ROWLIST, SETTINGS):
         ax.imshow( logF*filt  ,aspect='auto', extent=[ t_freq[0], t_freq[-1], e_freq[0]+defreq, e_freq[-1]+defreq  ] )
         ax.axhline(0,c='r')
         ax.axvline(0,c='r')
-        plt.show()
-    # return fig, ax
+        # plt.show()
+    return fig, ax
 
 def corr(ROWLIST, SETTINGS):
 
@@ -669,7 +677,7 @@ def plot_polar(ROWLIST, SETTINGS):
 
     return [fig,fig_R], [ax, ax_R]
 
-def plot_spectrogram(fs, SETTINGS):
+def plot_spectrogram(fs, SETTINGS, nperseg=500):
 
     from scipy import signal
     X, V, fi_rows, R, t, imap, rmap = slicer(SETTINGS)
@@ -680,7 +688,7 @@ def plot_spectrogram(fs, SETTINGS):
     for chain in range(Npr):
         f, t, Sxx = signal.spectrogram(X[:,chain,0], fs,
                                        # window='boxcar',
-                                       nperseg=int(7500) )
+                                       nperseg=nperseg )
         try:
             Sxxmean += Sxx
         except:
@@ -739,9 +747,11 @@ def angle_dist(ROWLIST):
         ax.plot( bins, H, 'o-' )
     plt.show()
 
-def plot_hist(SETTINGS,nbin):
+def plot_hist(SETTINGS,nbin=100):
 
     import matplotlib.ticker as mtick
+
+    nbin = 100 if nbin == None else nbin
 
     xcm, vcm, fi_rows, R, t, imap, rmap = slicer(SETTINGS)
     RUNS, ini, end, rows, Name = SETTINGS
@@ -824,8 +834,8 @@ def init_parser():
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('RUNS', type=int , help='Total number of runs in stack')
-    parser.add_argument('INI' , type=int , help='Inital run to process')
-    parser.add_argument('END' , type=int, help='Stop at END+1 run')
+    parser.add_argument('INI' , type=float , help='Inital run to process (takes floats)')
+    parser.add_argument('END' , type=float, help='Stop at END+1 run (take floats)')
     parser.add_argument('ROWS', type=int, help='Number of ROWS in system (UP+DOWN rows)')
     parser.add_argument('NAME', help='Optional name of file')
     parser.add_argument('--r2',  nargs='+', type=int,  metavar='row' ,default=False, help='Plots r2')
@@ -838,12 +848,12 @@ def init_parser():
     parser.add_argument('--x', action='store_true', default=False, help='Plots x')
     parser.add_argument('--xvfi', action='store_true', default=False, help='Plots x, v and phi')
     parser.add_argument('--fft-x', action='store_true', default=False, help='Plots fft-x')
-    parser.add_argument('--spectrogram', action='store_true', default=False, help='Plots spectrogram')
-    parser.add_argument('--fft2', action='store_true', default=False, help='Plots fft2')
+    parser.add_argument('--spectrogram', nargs='?',type=int, default=False, metavar='nperseg', help='Plots spectrogram')
+    parser.add_argument('--fft2', nargs='+', type=int, metavar='row', default=False, help='Plots fft2')
     parser.add_argument('--corr', action='store_true', default=False, help='Plots corr')
-    parser.add_argument('--hist', type=int, default=False, help='Plots 2d hist')
+    parser.add_argument('--hist', nargs='?', type=int, default=False, metavar='BINS', help='Plots 2d hist')
     parser.add_argument('--save', action='store_true', default=False, help='saves plot')
-    print(parser.print_help())
+    # print(parser.print_help())
 
     # parser.add_argument('--hist', action='store_true', default=False, help='Plots 2d hist')
     # parser.add_argument('SETTINGS', nargs=argparse.REMAINDER, help='RUNS INI END ROWS Name')
@@ -854,7 +864,7 @@ def init_parser():
 def main():
     parser = init_parser()
     args = parser.parse_args()
-    print(args)
+    # print(args)
     # print(args.plot_str)
 
     try:
@@ -866,8 +876,9 @@ def main():
 
     if args.r2:
         fig, ax = plot_r2(SETTINGS, args.r2)
-        fig.savefig('r2.png')
-        md.add_meta('r2.png', meta)
+        if args.save:
+            fig.savefig('r2.png')
+            md.add_meta('r2.png', meta)
         plt.show()
     elif args.ph_dyn:
         plot_phase_dyn()
@@ -875,10 +886,11 @@ def main():
         stripes_ROW(range(rows), SETTINGS )
     elif args.plot_str:
         figax, figax_pend = plot_stripes_ROW(args.plot_str, SETTINGS ) #range(rows)
-        # figax_pend[0].savefig('pend.png')
-        # md.add_meta('pend.png', meta)
-        figax[0].savefig('stripe.png')
-        md.add_meta('stripe.png', meta)
+        if args.save:
+            figax[0].savefig('stripe.png')
+            md.add_meta('stripe.png', meta)
+            figax_pend[0].savefig('pend.png')
+            md.add_meta('pend.png', meta)
         plt.show()
     elif args.plot_polar:
         figs, axs = plot_polar(args.plot_polar, SETTINGS)
@@ -900,20 +912,21 @@ def main():
         if args.save:
             with open('fourier-plot.pkl','wb') as fid: pickle.dump(ax, fid)
             with open('fourier-dat.pkl','wb') as fid: pickle.dump(dat, fid)
-    elif args.spectrogram:
+    elif args.spectrogram or args.spectrogram == None:
         # sample_rate = 2000 # elastico
         sample_rate = 500 # mecanico/free/long
-        ax = plot_spectrogram(sample_rate, SETTINGS)
+
+        ax = plot_spectrogram(sample_rate, SETTINGS, args.spectrogram)
         plt.show()
-        # elif args.save:
-        #     with open('fourier-plot.pkl','wb') as fid: pickle.dump(ax, fid)
-        #     with open('fourier-dat.pkl','wb') as fid: pickle.dump(dat, fid)
+        if args.save:
+            with open('fourier-plot.pkl','wb') as fid: pickle.dump(ax, fid)
+            with open('fourier-dat.pkl','wb') as fid: pickle.dump(dat, fid)
     elif args.fft2:
         # sample_rate = 2000 # elastico
         sample_rate = 500 # mecanico/free/long
         # fig, ax = plot_fft2(sample_rate, range(6))
-        plot_fft2(sample_rate, range(6), SETTINGS)
-        # plt.show()
+        fig, ax = plot_fft2(sample_rate, args.fft2, SETTINGS)
+        plt.show()
     elif args.corr:
         ax, dat = corr(range(rows), SETTINGS) #range(rows)
         if args.save:
@@ -921,7 +934,7 @@ def main():
             with open('corr-plot-'+str(ini)+'-'+str(end)+'.pkl','wb') as fid: pickle.dump(ax, fid)
         else:
             plt.show()
-    elif args.hist:
+    elif args.hist or args.hist == None:
         fig, ax = plot_hist(SETTINGS,args.hist)
         plt.show()
 

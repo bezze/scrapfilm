@@ -22,7 +22,7 @@ OUTPUTS
 
 import sys , os
 import numpy as np
-import init_var_func as iv
+import init_var as iv
 
 try:
     mode = sys.argv[1]
@@ -48,7 +48,7 @@ for i in range(M,N+1): # M_runs, M+1_runs, ..., N_runs
 
     os.chdir(str(i)+'_run')
 
-    r_cent, v_all = iv.init_var()
+    r_cent, v_all = iv.init_var(3).centered()
 
     vcm = np.mean(v_all, axis=2)
 

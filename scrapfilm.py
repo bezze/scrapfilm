@@ -303,5 +303,5 @@ def vel_all(chains,archivo):
 #
 #    return r - np.trunc(2*r/xb)*xb #out
 
-boundary = lambda r,xb: r - np.trunc(2*r/xb)*xb
+unbound = lambda r,xb: r - np.trunc(2*r/xb)*xb
 
