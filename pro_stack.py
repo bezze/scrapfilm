@@ -170,6 +170,21 @@ def plot_r2(SETTINGS,ROWLIST):
     print(np.mean(r2.real,axis=0))
     return fig, axROWS
 
+def r2_stat(SETTINGS):
+    xcm, vcm, fi_rows, R, t, imap, rmap = slicer(SETTINGS)
+    RUNS, ini, end, rows, Name = SETTINGS
+    r2 = (R*cj(R)).real
+    mean = np.mean(r2,axis=0)
+    std  = np.std(r2, axis=0)
+    print( "   ".join( ["ROW", "MEAN", "STD"] ) )
+    for i in range( len(mean) ):
+        # text = "{0}\t{1:.3f}\t{2:.3f}".format( i, mean[i], std[i])
+        text = "{0}   {1:.3f}   {2:.3f}".format( i, mean[i], std[i])
+        print( text )
+
+    print("-"*len(text))
+    print( "\t".join( ["<MEAN>", "<STD>/sqrt(size)"] ) )
+    print( "{0:.3f}\t{1:.3f}".format( np.mean(mean), np.mean(std)/len(std)**.5 ) )
 
 def plot_x(SETTINGS, fila=0, chain=0):
     xcm, vcm, fi_rows, R, t, imap, rmap = slicer(SETTINGS)
@@ -839,6 +854,7 @@ def init_parser():
     parser.add_argument('ROWS', type=int, help='Number of ROWS in system (UP+DOWN rows)')
     parser.add_argument('NAME', help='Optional name of file')
     parser.add_argument('--r2',  nargs='+', type=int,  metavar='row' ,default=False, help='Plots r2')
+    parser.add_argument('--r2-stat',action='store_true', default=False, help='Prints R**2 mean value and std for the system')
     parser.add_argument('--ph-dyn', action='store_true', default=False, help='')
     parser.add_argument('--str', action='store_true', default=False, help='Gets and writes block data')
     parser.add_argument('--plot-str', nargs='+', type=int, default=False, metavar='row', help='Plots stripes')
@@ -880,6 +896,8 @@ def main():
             fig.savefig('r2.png')
             md.add_meta('r2.png', meta)
         plt.show()
+    if args.r2_stat:
+        r2_stat(SETTINGS)
     elif args.ph_dyn:
         plot_phase_dyn()
     elif args.str:
