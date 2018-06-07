@@ -21,10 +21,8 @@ from numpy import save as npsave
 
 sf = scrapfilm('film_xmol', 'vel.dat')
 
-r_all = sf.read_film()
-
-v_all = sf.read_vel()
-
+r_all, mask = sf.read_film()
+v_all, mask = sf.read_vel(mask)
 
 npsave('r_all',r_all)
 npsave('v_all',v_all)

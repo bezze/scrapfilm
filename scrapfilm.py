@@ -30,32 +30,49 @@ class scrapfilm ():
         self._film = archivo_film
         self._vel = archivo_vel
 
-    def read_ (self,archivo):
+    def read_ (self,archivo,mask=None):
         """ Esta es una rutina magica para levantar rapido los datos y meterlos
         en un array de python, el resultado tiene la forma:
             ( #FRAMES, #CHAINS, #MON, #DIM )
             """
-        NCH = int(self.N/self.NMON) # Number of chains
+
+        """ TO DO: Implement a read from system_input !!!"""
+        NCH = 30 # Number of chains (C-O)
+        NPOL = NCH*self.NMON # Number of polymer beads in brush
+        NFL = 22000 # Number of fluid particles (He)
 
         # This is used to filter one out of every 1202 rows
-        trueIf1200Line = lambda row: True if row % (self.N+2) == 0 else False
+        trueIfNLine = lambda row: True if row % (self.N+2) == 0 else False
 
         # This two lines guarantee compatibility of the method with film_xmol
         # and vel.dat
-        cols = [1,2,3] if archivo == self._film else [0,1,2]
+        cols = [0,1,2,3] if archivo == self._film else [0,1,2]
         colname = list('AXYZ') if archivo == self._film else list('XYZ')
 
         rawdat=p.read_table(archivo, header=None, usecols=cols,
-                            skiprows=trueIf1200Line, names=colname,
+                            skiprows=trueIfNLine, names=colname,
                             delim_whitespace=True)
 
         NFR = int(rawdat.shape[0]/self.N) # Number of frames
 
-        # A = NFR*NCH*(['Cl']+(self.NMON-1)*['O'])
+        # A = NFR*( NCH*(['Cl']+(self.NMON-1)*['O']) + NFL*['He'] )
         A = NFR*NCH*([i for i in range(self.NMON)])
         CH = NFR*sorted([i for i in range(NCH)]*self.NMON)
-        FRAMES = sorted([i for i in range(NFR)]*self.N)
+        FRAMES = sorted([i for i in range(NFR)]*NPOL)
         # print(len(A));print(len(CH));print(len(FRAMES))
+
+        # Aca le paso la mascara que ya calcule en film_xmol a las vel
+        # Este hack es sucio y cochino, lo mejor es editar el vel.dat
+        # para que tenga informacion de los atomos y no tenga que hacer
+        # malabares.
+        # Nota: Seria una buena idea implementar un frame separado para
+        # el fluido.
+        if type(mask) == type(None):
+            AtomFilt = rawdat['A']!='He'
+        else:
+            AtomFilt = mask
+
+        rawdat = rawdat[AtomFilt].loc[:,['X','Y','Z']]
 
         index_array = [FRAMES,CH,A]
         tuples = list(zip(*index_array))
@@ -64,13 +81,13 @@ class scrapfilm ():
 
         shape = list(map(len, chunk.index.levels)) + [3] # [ frames, chains, beads, dims ]
         # print( chunk.values.reshape(shape) )
-        return chunk.values.reshape(shape)
+        return chunk.values.reshape(shape), AtomFilt
 
     def read_film (self):
         return self.read_(self._film)
 
-    def read_vel (self):
-        return self.read_(self._vel)
+    def read_vel (self, mask):
+        return self.read_(self._vel, mask)
 
 def analyze(chain,mon,archivo, rel=False):
     import pandas as p
